@@ -1,0 +1,114 @@
+{
+    "de": {
+        "name": "Deutsch",
+        "messages": {
+            "welcome": "Willkommen beim Taschenrechner!",
+            "prompt_first_number": "Wie lautet die erste Zahl?",
+            "prompt_second_number": "Wie lautet die zweite Zahl?",
+            "prompt_operation": "Welche Rechenoperation möchten Sie durchführen?\n1) Addieren 2) Subtrahieren 3) Multiplizieren 4) Dividieren",
+            "result": "Das Ergebnis lautet:",
+            "another_operation": "Möchten Sie eine weitere Operation durchführen? [J/N] ",
+            "answer": "j",
+            "goodbye": "Tschüss",
+            "invalid_number": "Hmm... das sieht nicht nach einer gültigen Zahl aus.",
+            "invalid_operation": "Sie müssen 1, 2, 3 oder 4 wählen",
+            "zero_division": "Hmm... du kannst nicht durch 0 teilen."
+        }
+    },
+    "el": {
+        "name": "Ελληνικά",
+        "messages": {
+            "welcome": "Καλώς ορίσατε στην Αριθμομηχανή!",
+            "prompt_first_number": "Ποιος είναι ο πρώτος αριθμός;",
+            "prompt_second_number": "Ποιος είναι ο δεύτερος αριθμός;",
+            "prompt_operation": "Ποια πράξη θα θέλατε να εκτελέσετε;\n1) Πρόσθεση 2) ​​Αφαίρεση 3) Πολλαπλασιασμός 4) Διαίρεση",
+            "result": "Το αποτέλεσμα είναι:",
+            "another_operation": "Θέλετε να εκτελέσετε άλλη πράξη; [Ν/Ο] ",
+            "answer": "ν",
+            "goodbye": "Αντίο",
+            "invalid_number": "Χμμ... αυτός δεν φαίνεται να είναι έγκυρος αριθμός.",
+            "invalid_operation": "Πρέπει να επιλέξετε 1, 2, 3 ή 4",
+            "zero_division": "Χμμ... δεν μπορείς να διαιρέσεις με το 0."
+        }
+    },
+    "en": {
+        "name": "English",
+        "messages": {
+            "welcome": "Welcome to Calculator!",
+            "prompt_first_number": "What's the first number?",
+            "prompt_second_number": "What's the second number?",
+            "prompt_operation": "What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide",
+            "result": "The result is:",
+            "another_operation": "Do you want to perform another operation? [Y/N] ",
+            "answer": "y",
+            "goodbye": "Bye",
+            "invalid_number": "Hmm... that doesn't look like a valid number.",
+            "invalid_operation": "You must choose 1, 2, 3, or 4",
+            "zero_division": "Hmm... you can't divide by 0.",
+        }
+    },
+    "es": {
+        "name": "Español",
+        "messages": {
+            "welcome": "¡Bienvenido a la Calculadora!",
+            "prompt_first_number": "¿Cuál es el primer número?",
+            "prompt_second_number": "¿Cuál es el segundo número?",
+            "prompt_operation": "¿Qué operación deseas realizar?\n1) Sumar 2) Restar 3) Multiplicar 4) Dividir",
+            "result": "El resultado es:",
+            "another_operation": "¿Deseas realizar otra operación? [S/N] ",
+            "answer": "s",
+            "goodbye": "Adiós",
+            "invalid_number": "Hmm... eso no parece un número válido.",
+            "invalid_operation": "Debes elegir 1, 2, 3 o 4",
+            "zero_division": "Χμμ... δεν μπορείς να διαιρέσεις με το 0."
+        }
+    },
+    "fr": {
+        "name": "Français",
+        "messages": {
+            "welcome": "Bienvenue dans la calculatrice !",
+            "prompt_first_number": "Quel est le premier nombre ?",
+            "prompt_second_number": "Quel est le deuxième nombre ?",
+            "prompt_operation": "Quelle opération souhaitez-vous effectuer ?\n1) Addition 2) Soustraction 3) Multiplication 4) Division",
+            "result": "Le résultat est :",
+            "another_operation": "Voulez-vous effectuer une autre opération ? [O/N] ",
+            "answer": "o",
+            "goodbye": "Au revoir",
+            "invalid_number": "Hmm... cela ne ressemble pas à un nombre valide.",
+            "invalid_operation": "Vous devez choisir 1, 2, 3 ou 4",
+            "zero_division": "Hmm... vous ne pouvez pas diviser par 0."
+        }
+    },
+    "it": {
+        "name": "Italiano",
+        "messages": {
+            "welcome": "Benvenuto nella Calcolatrice!",
+            "prompt_first_number": "Qual è il primo numero?",
+            "prompt_second_number": "Qual è il secondo numero?",
+            "prompt_operation": "Quale operazione vuoi eseguire?\n1) Addizione 2) Sottrazione 3) Moltiplicazione 4) Divisione",
+            "result": "Il risultato è:",
+            "another_operation": "Vuoi eseguire un'altra operazione? [S/N] ",
+            "answer": "s",
+            "goodbye": "Ciao",
+            "invalid_number": "Hmm... questo non sembra un numero valido.",
+            "invalid_operation": "Devi scegliere 1, 2, 3 o 4",
+            "zero_division": "Hmm... non puoi dividere per 0."
+        }
+    },
+    "ru": {
+        "name": "Русский",
+        "messages": {
+            "welcome": "Добро пожаловать в калькулятор!",
+            "prompt_first_number": "Введите первое число:",
+            "prompt_second_number": "Введите второе число:",
+            "prompt_operation": "Какую операцию вы хотите выполнить?\n1) Сложение 2) Вычитание 3) Умножение 4) Деление",
+            "result": "Результат:",
+            "another_operation": "Хотите выполнить еще одну операцию? [Д/Н] ",
+            "answer": "д",
+            "goodbye": "До свидания",
+            "invalid_number": "Хм... похоже, это не число.",
+            "invalid_operation": "Нужно выбрать 1, 2, 3 или 4",
+            "zero_division": "Хмм... нельзя делить на 0."
+        }
+    }  
+}
