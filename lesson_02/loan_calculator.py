@@ -1,7 +1,26 @@
-def main():
+import os
 
+def main():
     """
     This function it's a Mortgage/Loan Calculator
+    """
+    while True:
+        os.system('clear')
+        # Get the required parameters.
+        loan = input_loan_amount()
+        interest = input_annual_interest()
+        duration_in_years = input_loan_duration()
+
+        print(repayment_calculation(loan, interest, duration_in_years))
+
+        new_query = input("Would you like to make another calculation? [Y/N]: ")
+        
+        if new_query.lower() != "y":
+            break
+
+
+def repayment_calculation(loan_amount, annual_interest, loan_duration_in_years):
+    """
     This calculator determines the monthly payment
     assuming that interest is compounded monthly.
 
@@ -13,11 +32,6 @@ def main():
     Returns:
         Monthly payement
     """
-
-    # Get the required parameters.
-    loan_amount = input_loan_amount()
-    annual_interest = input_annual_interest()
-    loan_duration_in_years = input_loan_duration()
 
     # Calculate loan duration in months.
     loan_duration_in_months = round(loan_duration_in_years * 12)
@@ -39,26 +53,36 @@ def main():
         )
 
     total_to_repay = monthly_payment * loan_duration_in_months
-    payment_correction = value_correction(total_to_repay,
+    last_payment_correction = final_payment_adjustment(total_to_repay,
                                           round(monthly_payment, 2),
                                           loan_duration_in_months
     )
-
     # Generate the answer to print at the end of the program.
+    """
     answer = f"\nTo repay ${loan_amount:,.2f}"
     answer += f" in {loan_duration_in_months} months "
     answer += f"at an annual interest of {annual_interest*100:,.2f}%\n"
     answer += f"You will have to repay ${monthly_payment:,.2f} per "
-
-    if payment_correction != 0:
-        last_payment = monthly_payment + payment_correction
-        answer += f"{loan_duration_in_months - 1} months"
-        answer += f"\nPlus a final payment of ${last_payment:,.2f}\n"
+    """
+    answer = (
+        f"\nTo repay ${loan_amount:,.2f}"
+        f" in {loan_duration_in_months} months "
+        f"at an annual interest of {annual_interest*100:,.2f}%\n"
+        f"You will have to repay ${monthly_payment:,.2f} "
+    )
+    if loan_duration_in_months == 1:
+        answer += "the first month.\n"
+    elif last_payment_correction != 0:
+        last_payment = monthly_payment + last_payment_correction
+        answer += (
+            f"per {loan_duration_in_months - 1} months"
+            f"\nPlus a final payment of ${last_payment:,.2f}\n"
+        )
 
     else:
-        answer += "month.\n"
+        answer += "per month.\n"
 
-    print(answer)
+    return answer
 
 
 def input_loan_amount():
@@ -68,9 +92,12 @@ def input_loan_amount():
     while True:
         try:
             amount = float(input("Enter the value of the loan: $ "))
+            if amount <= 0:
+                raise ValueError
             break
         except ValueError:
-            print("Incorrect value!\nPlease enter a valid number.")
+            print("Incorrect value!")
+            print("Please enter a number greater than 0.")
 
     return amount
 
@@ -84,13 +111,16 @@ def input_annual_interest():
             interest = (
                 float(
                     input(
-                        "Enter the Annual Percentage Rate (APR) [###%]: "
+                        "Enter the Annual Percentage Rate (APR) [e.g., enter 5 for 5%]: "
                     )
                 )
             ) / 100
+            if interest < 0:
+                raise ValueError
             break
         except ValueError:
-            print("Incorrect value!\nPlease enter a valid number.")
+            print("Incorrect value!")
+            print("Please enter a positive number.")
 
     return interest
 
@@ -102,17 +132,17 @@ def input_loan_duration():
     while True:
         try:
             duration_years = float(input("Enter the loan duration in years: "))
-            if duration_years < 0:
+            if duration_years <= 0:
                 raise ValueError
             break
         except ValueError:
             print("Incorrect value!")
-            print("Please enter a valid number greater than 0.")
+            print("Please enter a number greater than 0.")
 
     return duration_years
 
 
-def value_correction(loan, payment, duration):
+def final_payment_adjustment(loan, payment, duration):
 
     # Calculate if the monthly payments cover the whole amount.
     correction = loan - (payment * duration)
