@@ -1,16 +1,37 @@
 import os
 import random
 
-# VALID_CHOICES = ["Rock", "Paper", "Scissors", "Lizard", "Spock"]
-CHOICE_BEATS = {
-    "Rock": ("Lizard", "Scissors"),
-    "Paper": ("Rock", "Spock"),
-    "Scissors": ("Lizard", "Paper"),
-    "Lizard": ("Paper", "Spock"),
-    "Spock": ("Rock", "Scissors")
+GAME_RULES = {
+    "rock": {
+        "display": "(R)ock",
+        "input": ("rock", "r"),
+        "wins": ("lizard", "scissors")
+    },
+    "paper": {
+        "display": "(P)aper",
+        "input": ("paper", "p"),
+        "wins": ("rock", "spock")
+    },
+    "scissors": {
+        "display": "S(c)issors",
+        "input": ("scissors", "sc", "c", ),
+        "wins": ("lizard", "paper")
+    },
+    "lizard": {
+        "display": "(L)izard",
+        "input": ("lizard", "l"),
+        "wins": ("paper", "spock")
+    },
+    "spock": {
+        "display": "(S)pock",
+        "input": ("spock", "sp", "s"),
+        "wins": ("rock", "scissors")
+    }
 }
 
-VALID_CHOICES = list(CHOICE_BEATS.keys())
+VALID_CHOICES = GAME_RULES.keys()
+DISPLAY_CHOICES = list(GAME_RULES[key]["display"] for key in VALID_CHOICES)
+
 
 def prompt(message):
     print(f"==> {message}")
@@ -21,42 +42,39 @@ def clear_screen():
 
 
 def get_player_choice():
-    prompt(f'Choose one: {", ".join(VALID_CHOICES)}')
-    choice = input().capitalize()
 
-    while choice not in VALID_CHOICES:
-        prompt("That's not a valid choice")
-        choice = input()
+    my_choice = ""
 
-    return choice
+    while my_choice not in VALID_CHOICES:
+
+        if my_choice !="":
+            prompt("That's not a valid choice\n")
+        prompt(f'Choose one: {", ".join(DISPLAY_CHOICES)}')
+
+        choice = input().lower()
+
+        for key in VALID_CHOICES:
+            if choice in GAME_RULES[key]["input"]:
+                my_choice = key
+                break
+
+    return my_choice
 
 
 def get_computer_choice():
-    return random.choice(VALID_CHOICES)
+    return random.choice(list(VALID_CHOICES))
 
 
 def display_winner(player_choice, computer_choice):
-    prompt(f"You chose {player_choice}, computer chose {computer_choice}")
+    print()
+    prompt(f"You chose {player_choice}, computer chose {computer_choice}\n")
 
-    if computer_choice in CHOICE_BEATS[player_choice]:
-        print("You win!")
-    elif player_choice in CHOICE_BEATS[computer_choice]:
-        print("Computer wins!")
+    if computer_choice in GAME_RULES[player_choice]["wins"]:
+        prompt(f"You win!\n")
+    elif player_choice in GAME_RULES[computer_choice]["wins"]:
+        prompt(f"Computer wins!\n")
     else:
-        print("It's a tie!")
-
-    """
-    if ((player == "rock" and computer == "scissors") or
-        (player == "paper" and computer == "rock") or
-        (player == "scissors" and computer == "paper")):
-        prompt("You win!")
-    elif ((player == "rock" and computer == "paper") or
-          (player == "paper" and computer == "scissors") or
-          (player == "scissors" and computer == "rock")):
-        prompt("Computer wins!")
-    else:
-        prompt("It's a tie!")
-    """
+        prompt(f"It's a tie!\n")
 
 
 def play_again():
