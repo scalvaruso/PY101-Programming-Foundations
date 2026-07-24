@@ -1,9 +1,12 @@
+import inflect
 import os
 import random
 
-GAME_RULES = {
+i = inflect.engine()
+
+BASIC_CHOICES = {
     "rock": {
-        "display": "(R)ock",
+        "display": "r) Rock",
         "input": ("rock", "r"),
         "wins": {
             "lizard": "Rock crushes Lizard",
@@ -11,7 +14,7 @@ GAME_RULES = {
         },
     },
     "paper": {
-        "display": "(P)aper",
+        "display": "p) Paper",
         "input": ("paper", "p"),
         "wins": {
             "rock": "Paper covers Rock",
@@ -19,15 +22,18 @@ GAME_RULES = {
         },
     },
     "scissors": {
-        "display": "S(c)issors",
+        "display": "c) Scissors",
         "input": ("scissors", "sc", "c", ),
         "wins": {
             "lizard": "Scissors decapitates Lizard",
             "paper": "Scissors cuts Paper",
         },
     },
+}
+
+EXTENDED_CHOICES = {
     "lizard": {
-        "display": "(L)izard",
+        "display": "l) Lizard",
         "input": ("lizard", "l"),
         "wins": {
             "paper": "Lizard eats Paper",
@@ -35,7 +41,7 @@ GAME_RULES = {
         },
     },
     "spock": {
-        "display": "(S)pock",
+        "display": "s) Spock",
         "input": ("spock", "sp", "s"),
         "wins": {
             "rock": "Spock vaporizes Rock",
@@ -44,62 +50,77 @@ GAME_RULES = {
     },
 }
 
-VALID_CHOICES = GAME_RULES.keys()
-DISPLAY_CHOICES = list(GAME_RULES[key]["display"] for key in VALID_CHOICES)
-
 
 def prompt(message):
     print(f"==> {message}")
 
 
 def clear_screen():
-    os.system("clear")
+    os.system("cls" if os.name == "nt" else "clear")
 
 
-def get_player_choice():
+def game_version():
+
+    clear_screen()
+    prompt("Select the version of the game you want to play.")
+
+    while True:
+        prompt("Enter:\n")
+        prompt("(C)lassic version: Rock, Paper, Scissors")
+        prompt("(E)xtended version: Rock, Paper, Scissors, Lizard, Spock\n")
+        version = input()
+        if version.lower() in ["c", "classical"]:
+            return BASIC_CHOICES
+        elif version.lower() in ["e", "extended"]:
+            return {**BASIC_CHOICES, **EXTENDED_CHOICES}
+        else:
+            prompt("Invalid choice!")
+
+
+def get_player_choice(game_choices, valid_choices, display_choices):
 
     my_choice = ""
 
-    while my_choice not in VALID_CHOICES:
+    while my_choice not in valid_choices:
 
         if my_choice != "":
             prompt("That's not a valid choice\n")
-        prompt(f'Choose one: {", ".join(DISPLAY_CHOICES)}')
+        prompt(f'Choose one:\n{"\n".join(display_choices)}')
 
         my_choice = input().lower()
 
-        for key in VALID_CHOICES:
-            if my_choice in GAME_RULES[key]["input"]:
+        for key in valid_choices:
+            if my_choice in game_choices[key]["input"]:
                 my_choice = key
                 break
 
     return my_choice
 
 
-def get_computer_choice():
-    return random.choice(list(VALID_CHOICES))
+def get_computer_choice(valid_choices):
+    return random.choice(list(valid_choices))
 
 
-def display_winner(player_choice, computer_choice):
-    results = [0, 0, 0]
+def display_match_winner(player_choice, computer_choice, game_choices):
+    
     print()
     prompt(
         f"You chose {player_choice.capitalize()}, computer chose {computer_choice.capitalize()}\n"
     )
 
-    if computer_choice in GAME_RULES[player_choice]["wins"].keys():
-        prompt(GAME_RULES[player_choice]["wins"][computer_choice])
-        prompt(f"You win!\n")
-        results[0] += 1
-    elif player_choice in GAME_RULES[computer_choice]["wins"].keys():
-        prompt(GAME_RULES[computer_choice]["wins"][player_choice])
-        prompt(f"Computer wins!\n")
-        results[1] += 1
+    if computer_choice in game_choices[player_choice]["wins"]:
+        prompt(game_choices[player_choice]["wins"][computer_choice])
+        prompt("You win!\n")
+        winner = "player"
+    elif player_choice in game_choices[computer_choice]["wins"]:
+        prompt(game_choices[computer_choice]["wins"][player_choice])
+        prompt("Computer wins!\n")
+        winner = "computer"
     else:
-        prompt(f"It's a tie!\n")
-        results[2] += 1
+        prompt("It's a tie!\n")
+        winner = "tie"
 
-    return results
+    return winner
 
 
 def play_again(message):
@@ -113,11 +134,12 @@ def play_again(message):
             prompt("That's not a valid choice")
 
 
-def play_round(my_win, computer_win, tie):
-    player = get_player_choice()
-    computer = get_computer_choice()
-    wins = display_winner(player, computer)
-    return [my_win + wins[0], computer_win + wins[1], tie + wins[2]]
+def play_round(game_choices, valid_choices, display_choices):
+    player = get_player_choice(game_choices, valid_choices, display_choices)
+    clear_screen()
+    computer = get_computer_choice(valid_choices)
+    winner = display_match_winner(player, computer, game_choices)
+    return winner
 
 
 def game_duration():
@@ -135,38 +157,59 @@ def game_duration():
     return matches
 
 
-def main():
-    clear_screen()
+def display_only(number_of_games):
+    return f"only {number_of_games}" if number_of_games > 0 else "none"
+
+
+def display_match(number_of_matches):
+    return f"{number_of_matches} {i.plural('match', number_of_matches)}"
+
+
+def play_game(game_choices, valid_choices, display_choices):
     number_of_matches = game_duration()
     total_matches = 0
-    games_won = [0, 0, 0]
+    scores = {"player": 0, "computer": 0, "tie": 0}
 
     while True:
-        total_matches += 1
-        if number_of_matches == 0:
-            play_round()
-            if not play_again("Do you want to play again (y/n)?"):
-                break
-            clear_screen()
+        
+        if number_of_matches != 0:
+            while total_matches < number_of_matches:
+                game_winner = play_round(game_choices, valid_choices, display_choices)
+                scores[game_winner] += 1
+                total_matches += 1
         else:
-            games_won = play_round(*games_won)
-            number_of_matches -= 1
-            if number_of_matches == 0:
-                clear_screen()
-                if games_won[0] > games_won[1]:
-                    prompt(f"You won {games_won[0]} matches, computer won {games_won[1]} out of {total_matches} matches")
-                    prompt(f"You are the final winner!\n")
+            while True:
+                game_winner = play_round(game_choices, valid_choices, display_choices)
+                scores[game_winner] += 1
+                total_matches += 1
+                if not play_again("Do you want to play again [y/n]?"):
                     break
-                elif games_won[1] > games_won[0]:
-                    prompt(f"You won only {games_won[0]} matches, computer won {games_won[1]} out of {total_matches} matches")
-                    prompt(f"Computer is the final winner!\n")
-                    break
-                else:
-                    prompt(f"You won {games_won[0]} matches, computer won {games_won[1]} out of {total_matches} matches")
-                    prompt(f"It's a tie!\n")
-                    if not play_again("Do you want to play an extra match to decide a winner? "):
-                        break
-                    number_of_matches = 1
+
+        if scores["player"] > scores["computer"]:
+            prompt(f"You won {display_match(scores['player'])} out of {total_matches}, Computer won {display_only(scores['computer'])}")
+            prompt("You are the final winner!\n")
+            break
+        elif scores["computer"] > scores["player"]:
+            prompt(f"Computer won {display_match(scores['computer'])} out of {total_matches}, You won {display_only(scores['player'])}")
+            prompt("Computer is the final winner!\n")
+            break
+        else:
+            prompt(f"You won {display_match(scores['player'])} and computer won {display_match(scores['computer'])} out of {total_matches}")
+            prompt("It's a tie!\n")
+            if not play_again("Do you want to play an extra match to decide a winner? [y/n]"):
+                break
+            else:
+                number_of_matches = total_matches + 1
+
+    prompt("By!\n")
+
+
+def main():
+    game_choices = game_version()
+    valid_choices = list(game_choices.keys())
+    display_choices = [game_choices[key]["display"] for key in valid_choices]
+    clear_screen()
+    play_game(game_choices, valid_choices, display_choices)
 
 
 if __name__ == "__main__":
