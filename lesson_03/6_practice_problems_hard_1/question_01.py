@@ -18,11 +18,9 @@ print(second())
 
 """
 No
-The first function will return the dic {
-        'prop1': "hi there",
-    }
+The function first() will return the dic {'prop1': "hi there",}
 
-Since the dic is on a line following return, the second function will return None
+The function second(), since the dic is on a line following return, will return None
 """
 
 # Launch School Solution
